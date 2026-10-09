@@ -1,0 +1,34 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "theorem_names": [
+    "OddBarker.odd_length_mem",
+    "OddBarker.odd_exists_iff",
+    "OddBarker.aperiodic_eq",
+    "OddBarker.skew",
+    "OddBarker.fold",
+    "OddBarker.doubling",
+    "OddBarker.run_bounds",
+    "OddBarker.four_dvd_of_even",
+    "OddBarker.existsRealCirculantHadamard_of_even",
+    "OddBarker.exists_iff_of_even",
+    "OddBarker.length_le_thirteen_of_even",
+    "OddBarker.exists_iff_of_circulantHadamard",
+    "OddBarker.length_le_thirteen_of_circulantHadamard"
+  ],
+  "definition_names": [
+    "OddBarker.IsSign",
+    "OddBarker.aperiodic",
+    "OddBarker.IsBarker",
+    "OddBarker.RealMatrix",
+    "OddBarker.IsCirculant",
+    "OddBarker.IsSignHadamard",
+    "OddBarker.ExistsRealCirculantHadamard"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": true
+}

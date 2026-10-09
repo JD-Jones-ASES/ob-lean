@@ -1,0 +1,251 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Barker sequences of odd length: for odd n, a Barker sequence of length n exists if and only if n is 1, 3, 5, 7, 11 or 13 (Turyn–Storer, by the proof of Schmidt–Willms); given the even-length classification, Barker sequences exist exactly at the lengths 1, 2, 3, 4, 5, 7, 11 and 13"
+  description: >-
+    A Lean 4 development of the classification of Barker sequences of odd length. A Barker sequence
+    of length n is a sequence h of n signs whose aperiodic autocorrelations C(k), the sum over
+    j < n - k of h(j) h(j + k), satisfy |C(k)| <= 1 for 0 < k < n. Turyn and Storer (1961) proved
+    that a Barker sequence of odd length has length 1, 3, 5, 7, 11 or 13. Theorem 1(iv) of
+    Turyn–Storer is false as stated (Willms 2014); per Schmidt–Willms the induction survives with a
+    corrected range; the theorem itself was never in doubt. The proof formalized is that of Schmidt
+    and Willms (2016), recast so that no case enumeration is needed: for odd n and m = (n - 1)/2, odd
+    shifts have autocorrelation 0 and even shifts (-1)^m (from C(u) + C(n - u) = n mod 4);
+    skew-symmetry h(k) h(n - 1 - k) = (-1)^(m + k); the folded identity, the sum over k <= w of
+    (-1)^k h(k) h(w - k), equals 1 for every even w <= n - 3; the doubling law
+    h(u - 1) h(u) = h(2u - 1) h(2u) for 1 <= u <= (n - 3)/2; Schmidt and Willms's Lemmas 3 and 4 in
+    sign-change form (for n >= 7 and h(0) = h(1), with p the first sign change and q the first sign
+    change not divisible by p, both are odd and 2q - 3 <= n <= p + q + 1, Lemma 4 by one
+    generating-function identity for the folded sums); and an endgame that leaves n in {7, 11, 13},
+    excluding n = 9 by skew-symmetry and doubling, with the alternation h(j) -> (-1)^j h(j) for the
+    normalization h(0) = h(1); the eight sequences of lengths 1, 2, 3, 4, 5, 7, 11 and 13 are Barker
+    by decide. Also proved: the even reduction of Turyn and Storer's footnote 2, that a Barker
+    sequence of even length n > 2 has 4 | n and yields a real circulant Hadamard matrix of order n.
+    Given the even-length classification as an explicit hypothesis (every Barker sequence of positive
+    even length has length 2 or 4, the statement even_length_eq_two_or_four of openai/math, family
+    179), a Barker sequence of positive length n exists exactly when n is 1, 2, 3, 4, 5, 7, 11 or 13,
+    and every Barker sequence has length at most 13; the same follows from the hypothesis that real
+    circulant Hadamard matrices of positive order exist only at orders 1 and 4 (the forward direction
+    of exists_iff_order_one_or_four of openai/math), through the even reduction. The seven
+    definitions are restated character for character from openai/math's two challenge files, so its
+    two theorems discharge the hypotheses by unfolding alone; they are not proved here. The restated
+    definitions and the adapted parts named in NOTICE derive from Apache-2.0 work of OpenAI (NOTICE,
+    LICENSES/Apache-2.0.txt); the rest is MIT.
+  authors: ["JD Jones"]
+  responsible_maintainers: ["JD Jones"]
+  license: "MIT"
+
+classification:
+  arxiv: ["math.CO", "math.NT"]
+  msc2020: ["11B83", "05B10", "94A55"]
+
+# PLACEHOLDER: the sources lane supplies this block (Turyn–Storer 1961; Willms 2014, arXiv:1404.4833;
+# Schmidt–Willms 2016, arXiv:1501.06035; openai/math EvenBarker and CirculantHadamard challenge files and the
+# Barker tree; formal-conjectures BarkerSequence; Borwein–Erdélyi 2013; Jedwab 2008; Lean; Mathlib). Every
+# reference named in README, PROOF or VERIFICATION needs an entry; the original-proof rule forces "other" or
+# "background" on all of them. The desk replaces "sources: []" with that block.
+sources: []
+
+# DESK: consider listing openai/math's family 179 (EvenBarker) and formal-conjectures' barker_conjecture here,
+# in the schema's shape, if the sources lane recommends it.
+related_formalizations: []
+
+status:
+  scope: >-
+    Thirteen compared theorems over seven compared definitions restated from openai/math's EvenBarker
+    and CirculantHadamard challenge files. Unconditional: for odd n, every Barker sequence of length n
+    has n in {1, 3, 5, 7, 11, 13}, and one exists exactly for those n; for odd n, the values of the
+    aperiodic autocorrelations, skew-symmetry, the folded identity, the doubling law and the run
+    bounds of Schmidt and Willms's Lemmas 3 and 4; for even n > 2, 4 | n and a real circulant
+    Hadamard matrix of order n. Conditional on the even-length classification, taken as an explicit
+    hypothesis: Barker sequences of positive length exist exactly at 1, 2, 3, 4, 5, 7, 11, 13, and
+    every Barker sequence has length at most 13; the same two, conditional on the statement that real
+    circulant Hadamard matrices of positive order exist only at orders 1 and 4. Not claimed: the
+    even-length classification and the circulant Hadamard statement themselves; Turyn and Storer's
+    Theorem 1; the uniqueness of the odd-length sequences. The intentional placeholders of
+    Challenge.lean are excluded from proof counts; Solution.lean does not import Challenge.lean.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "OddBarker.odd_length_mem"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.odd_exists_iff"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.aperiodic_eq"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.skew"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.fold"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.doubling"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.run_bounds"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.four_dvd_of_even"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.existsRealCirculantHadamard_of_even"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.exists_iff_of_even"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.length_le_thirteen_of_even"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.exists_iff_of_circulantHadamard"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "OddBarker.length_le_thirteen_of_circulantHadamard"
+      file: "Solution.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["Claude (Anthropic)"]
+      framework: "Claude Code with parallel subagents"
+      tool_setup: >-
+        The project was directed by its author. Claude (Anthropic) in Claude Code was used throughout:
+        the recast of the Schmidt–Willms proof, the Lean proofs, the literature and prior-art searches,
+        the checkers and the repository text. Lean v4.35.0-rc2 and Mathlib v4.35.0-rc2 (commit
+        065356127b1dc0016f66b7283ce0ce2c4055aa55) are pinned by the committed manifest and lake update
+        is never run; there are no GitHub Actions workflows. There is no native_decide and no case
+        enumeration in the classification (n = 9 is excluded by the argument): decide is used only for
+        the eight witnesses and the forged control; the rest is big-operator rewriting, ring and
+        linear_combination identities, and omega over residues and divisibility.
+      spend_usd: "not tracked"
+      notes: "See DISCLOSURE.md."
+
+fidelity:
+  divergences: >-
+    The seven definitions are openai/math's, character for character, in the namespace OddBarker:
+    sequences are h : Fin n → ℤ, the aperiodic autocorrelation is indexed over Fin (n - k), and the
+    Barker condition is |C(k)| <= 1 for 0 < k < n. The hypothesis heven of theorems 10 and 11 is
+    the statement even_length_eq_two_or_four of openai/math with its binders, and hcirc of theorems
+    12 and 13 is the forward direction of exists_iff_order_one_or_four; nothing about them is proved.
+    Schmidt and Willms index from 1 and assume n > 1; here indices start at 0 and n = 1 is included.
+    Their run decomposition is replaced by the first sign change p (their s_1) and the first sign
+    change not divisible by p (their s_e), as the run_bounds statement makes explicit; the
+    normalization h(0) = h(1) is a hypothesis of run_bounds and is reached by the alternation in the
+    proof of odd_length_mem. Turyn and Storer's Theorem 2 states only n <= 13; the list
+    {1, 3, 5, 7, 11, 13} is from their introduction and Schmidt and Willms's Theorem 1.
+
+review:
+  status: "self-assessed"
+  notes: >-
+    No independent human expert review and no source-author endorsement is claimed; AI agents
+    developed and cross-reviewed the proof, the statements were checked against Schmidt and Willms's
+    paper and openai/math's challenge files, and VERIFICATION.md states what is checked and what is
+    not. Mechanical correctness and agreement of formal statements do not establish priority or
+    significance.
+
+alignment:
+  namespace: "OddBarker"
+  statements:
+    - source: "Turyn–Storer 1961, Theorem 2 with the list of the introduction; Schmidt–Willms 2016, Theorem 1"
+      lean: "OddBarker.odd_length_mem"
+      module: "Solution"
+      status: "proved"
+      note: "A Barker sequence of odd length n has n in {1, 3, 5, 7, 11, 13}."
+    - source: "Turyn–Storer 1961, introduction; Schmidt–Willms 2016, Theorem 1 with the known sequences"
+      lean: "OddBarker.odd_exists_iff"
+      module: "Solution"
+      status: "proved"
+      note: "For odd n, a Barker sequence of length n exists if and only if n is in {1, 3, 5, 7, 11, 13}."
+    - source: "Schmidt–Willms 2016, Lemma 2 (after Turyn–Storer)"
+      lean: "OddBarker.aperiodic_eq"
+      module: "Solution"
+      status: "proved"
+      note: "For odd n, C(k) = 0 for odd k and C(k) = (-1)^((n - 1)/2) for even k, 0 < k < n."
+    - source: "Schmidt–Willms 2016, Lemma 2(i), 0-indexed"
+      lean: "OddBarker.skew"
+      module: "Solution"
+      status: "proved"
+      note: "For odd n, h(k) h(n - 1 - k) = (-1)^((n - 1)/2 + k)."
+    - source: "This development; the equations (k) of Turyn–Storer's Theorem 1 are its half-sums"
+      lean: "OddBarker.fold"
+      module: "Solution"
+      status: "proved"
+      note: "For odd n and even w <= n - 3, the sum over k <= w of (-1)^k h(k) h(w - k) is 1."
+    - source: "Schmidt–Willms 2016, Lemma 2(ii), 0-indexed"
+      lean: "OddBarker.doubling"
+      module: "Solution"
+      status: "proved"
+      note: "For odd n and 1 <= u <= (n - 3)/2, h(u - 1) h(u) = h(2u - 1) h(2u)."
+    - source: "Schmidt–Willms 2016, Lemmas 3 and 4, in sign-change form"
+      lean: "OddBarker.run_bounds"
+      module: "Solution"
+      status: "proved"
+      note: "For odd n >= 7 and h(0) = h(1): p and q odd, 2q <= n + 3 and n <= p + q + 1."
+    - source: "Turyn–Storer 1961, footnote 2"
+      lean: "OddBarker.four_dvd_of_even"
+      module: "Solution"
+      status: "proved"
+      note: "A Barker sequence of even length n > 2 has 4 | n."
+    - source: "Turyn–Storer 1961, footnote 2 (vanishing periodic autocorrelations); the route of openai/math's Barker tree"
+      lean: "OddBarker.existsRealCirculantHadamard_of_even"
+      module: "Solution"
+      status: "proved"
+      note: "A Barker sequence of even length n > 2 yields a real circulant Hadamard matrix of order n."
+    - source: "This development, conditional on openai/math's even_length_eq_two_or_four (family 179)"
+      lean: "OddBarker.exists_iff_of_even"
+      module: "Solution"
+      status: "proved"
+      note: "Given heven, a Barker sequence of positive length n exists exactly when n is in {1, 2, 3, 4, 5, 7, 11, 13}."
+    - source: "This development, conditional on openai/math's even_length_eq_two_or_four (family 179); the Barker conjecture's bound"
+      lean: "OddBarker.length_le_thirteen_of_even"
+      module: "Solution"
+      status: "proved"
+      note: "Given heven, every Barker sequence has length at most 13."
+    - source: "This development, conditional on openai/math's exists_iff_order_one_or_four (forward direction)"
+      lean: "OddBarker.exists_iff_of_circulantHadamard"
+      module: "Solution"
+      status: "proved"
+      note: "Given hcirc, a Barker sequence of positive length n exists exactly when n is in {1, 2, 3, 4, 5, 7, 11, 13}."
+    - source: "This development, conditional on openai/math's exists_iff_order_one_or_four (forward direction)"
+      lean: "OddBarker.length_le_thirteen_of_circulantHadamard"
+      module: "Solution"
+      status: "proved"
+      note: "Given hcirc, every Barker sequence has length at most 13."
+
+acknowledgements: >-
+  Turyn and Storer for the theorem and the even reduction; Willms for the counterexamples to Theorem
+  1(iv); Schmidt and Willms for the proof formalized; openai/math for the definitions and the even
+  half's statements; Lean, Mathlib, Comparator, lean4export, NanoDa, and the Palomar policy and
+  verifier projects. AI assistance is disclosed above and in DISCLOSURE.md.

@@ -1,0 +1,90 @@
+# Verification
+
+All thirteen statements of Challenge.lean have proofs. The local build, the axiom audit, the source guard, the
+definition and statement checks, the module-resolution check, the elaboration check and Palomar's core-notation
+audit of the statements pass; `python scripts/verify.py` runs them all and ends with `VERIFY: PASS`. The checks
+below were last run on the tree of the final commit; a build log is evidence for that tree only. Theorems are
+numbered as in `comparator.json`, which is also their order in Challenge.lean.
+<!-- DESK: confirm every sentence of this paragraph against the final run before publishing. -->
+
+## Formal scope
+
+| # | Statement | Proved in |
+| --- | --- | --- |
+| 1 | `odd_length_mem` — odd `n`, Barker ⇒ `n ∈ {1, 3, 5, 7, 11, 13}` | OB/Endgame.lean (with Runs, Fold, Skew, Parity) |
+| 2 | `odd_exists_iff` — odd `n`: a Barker sequence of length `n` exists iff `n ∈ {1, 3, 5, 7, 11, 13}` | OB/Compose.lean (with Endgame, Witnesses) |
+| 3 | `aperiodic_eq` — odd `n`: `C(k) = 0` for odd `k`, `(−1)^((n−1)/2)` for even `k` | OB/Parity.lean |
+| 4 | `skew` — `h k · h (n−1−k) = (−1)^((n−1)/2 + k)` | OB/Skew.lean |
+| 5 | `fold` — `∑_{k ≤ w} (−1)^k h k · h (w−k) = 1` for even `w ≤ n − 3` | OB/Fold.lean |
+| 6 | `doubling` — `h (u−1) · h u = h (2u−1) · h (2u)` for `1 ≤ u ≤ (n−3)/2` | OB/Fold.lean |
+| 7 | `run_bounds` — `p`, `q` odd, `2q − 3 ≤ n ≤ p + q + 1` (Schmidt–Willms, Lemmas 3 and 4) | OB/Runs.lean (with KeyBound, Identity) |
+| 8 | `four_dvd_of_even` — even `n > 2`, Barker ⇒ `4 ∣ n` | OB/Hadamard.lean (with Parity) |
+| 9 | `existsRealCirculantHadamard_of_even` — even `n > 2`, Barker ⇒ a real circulant Hadamard matrix of order `n` | OB/Hadamard.lean |
+| 10 | `exists_iff_of_even` — given the even half, Barker lengths are exactly `{1, 2, 3, 4, 5, 7, 11, 13}` | OB/Compose.lean |
+| 11 | `length_le_thirteen_of_even` — given the even half, every Barker sequence has length `≤ 13` | OB/Compose.lean |
+| 12 | `exists_iff_of_circulantHadamard` — the same classification, given the circulant Hadamard statement | OB/Hadamard.lean (with Compose) |
+| 13 | `length_le_thirteen_of_circulantHadamard` — length `≤ 13`, given the circulant Hadamard statement | OB/Hadamard.lean (with Compose) |
+
+Each statement is restated verbatim in Solution.lean and closed by the internal theorem of the same name with the
+suffix `_internal`. The hypotheses of theorems 10–13 are not proved here: `heven` is the statement
+`OAI.CirculantHadamard.Barker.even_length_eq_two_or_four` of openai/math with its binders, and `hcirc` the forward
+direction of `OAI.CirculantHadamard.exists_iff_order_one_or_four`; since the seven definitions are openai/math's
+character for character, those theorems, in one environment with these, discharge the hypotheses by unfolding.
+PROOF.md names the lemma behind each step.
+
+## Local checks
+
+```sh
+python scripts/verify.py --fetch-cache
+```
+
+runs, in order: the pins (`lean-toolchain` and the Mathlib revision of `lake-manifest.json` are the committed ones),
+`scripts/check-source.py`, `scripts/check_definitions.py`, `scripts/check_statements.py`, `lake build` of the four
+targets `OB`, `Challenge`, `Solution`, `Test`, `lake env python scripts/check_module_resolution.py`, the elaboration
+check (every compared definition printed with `pp.all` from the Challenge and from `OB.Defs`; the outputs must be
+identical), and Palomar's `scripts/core_notation_audit.lean` on the twenty compared declarations of
+`comparator.json` (thirteen theorems, seven definitions); the last line is `VERIFY: PASS` or `VERIFY: FAIL`.
+`--skip-build` leaves out the four Lean steps.
+
+The `Test` target imports `Solution` and audits every constant of its environment whose name begins with
+`OddBarker.`, `_private.OB.` or `_private.Solution.` (<!-- DESK: N --> constants; the audit fails below 80),
+permits only `propext`, `Classical.choice` and `Quot.sound`, and fails if any of the thirteen compared theorems is
+missing. A placeholder in a proof compiles with a warning; this audit is what fails the build. Challenge.lean
+intentionally contains thirteen proof placeholders; Solution.lean and the modules it imports contain none, and
+Solution.lean does not import Challenge.lean. The source guard rejects `sorry`, `sorryAx`, `admit`, `axiom`,
+`unsafe`, `partial`, `native_decide`, `implemented_by`, `extern`, `Lean.ofReduceBool` and the kernel-bypass options
+`debug.skipKernelTC` and `debug.byAsSorry` in `OB/`, Solution.lean and `Test/`, the same tokens except `sorry` in
+Challenge.lean, and any `debug.` option in the `[leanOptions]` table of lakefile.toml. `check_definitions.py` compares the
+seven definitions of Challenge.lean and `OB/Defs.lean` character for character with each other and, up to the
+namespace, with `lean/ComparatorChallenges/EvenBarker.lean` (`IsSign`, `aperiodic`, `IsBarker`) and
+`lean/ComparatorChallenges/CirculantHadamard.lean` (`RealMatrix`, `IsCirculant`, `IsSignHadamard`,
+`ExistsRealCirculantHadamard`) of openai/math at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, whose copies are
+kept in `scripts/` as reference data; `check_statements.py` compares every theorem header of Challenge.lean with
+Solution.lean. Palomar's `scripts/core_notation_audit.lean` is an unmodified copy from
+github.com/PalomarRegistry/PalomarSubmission.
+<!-- DESK: add the core-notation audit's time and memory; confirm the guard's file list (OB.lean, Test.lean). -->
+
+Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` (commit `065356127b1dc0016f66b7283ce0ce2c4055aa55`) are pinned by the
+committed manifest; `lake update` is never run. Every `.lean` file of the repository carries a `module` header.
+`OB/Defs.lean` imports exactly what the Challenge imports (`Mathlib`), so that the seven definitions elaborate to
+identical terms in both environments. <!-- DESK: build time from an empty .lake/build after the cache. -->
+
+## The finite computations
+
+There is no `native_decide` and no case enumeration in the classification: `n = 9` is excluded by the argument
+(PROOF.md, the endgame). The kernel computations are the eight witnesses, each `IsBarker` by `decide` over its
+signs and its at most twelve shifts, and the control `forged13_not_isBarker` (the length-13 sequence with its last
+sign flipped has `C(1) = 2`), which is a theorem, so a forged witness is rejected by construction. Everything else is
+`omega` over residues and divisibility, `ring`/`linear_combination` identities, and big-operator rewriting.
+<!-- DESK: if scripts/check_barker.py (the standard-library exhaustive search to n = 45 with its forged test) is
+added, describe it here as a cross-check that no Lean proof depends on. -->
+
+## Not checked here
+
+- The even-length classification (`even_length_eq_two_or_four`) and the circulant Hadamard theorem
+  (`exists_iff_order_one_or_four`) are hypotheses. openai/math catalogues Lean proofs of both at Lean v4.34.1; they
+  are not registered on Palomar, and nothing of them is built or checked here.
+- Turyn–Storer's Theorem 1 and their inductive route are not formalized; the proof formalized is Schmidt–Willms's,
+  recast (PROOF.md).
+- The uniqueness of the Barker sequences of odd length up to negation and alternation is not a Lean theorem here.
+  <!-- DESK: delete this bullet if `unique` lands. -->
