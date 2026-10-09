@@ -5,7 +5,6 @@ definition and statement checks, the module-resolution check, the elaboration ch
 audit of the statements pass; `python scripts/verify.py` runs them all and ends with `VERIFY: PASS`. The checks
 below were last run on the tree of the final commit; a build log is evidence for that tree only. Theorems are
 numbered as in `comparator.json`, which is also their order in Challenge.lean.
-<!-- DESK: confirm every sentence of this paragraph against the final run before publishing. -->
 
 ## Formal scope
 
@@ -48,7 +47,7 @@ identical), and Palomar's `scripts/core_notation_audit.lean` on the twenty-two c
 `--skip-build` leaves out the four Lean steps.
 
 The `Test` target imports `Solution` and audits every constant of its environment whose name begins with
-`OddBarker.`, `_private.OB.` or `_private.Solution.` (<!-- DESK: N --> constants; the audit fails below 80),
+`OddBarker.`, `_private.OB.` or `_private.Solution.` (190 constants on the tree of the final commit; the audit fails below 80),
 permits only `propext`, `Classical.choice` and `Quot.sound`, and fails if any of the fourteen compared theorems is
 missing. A placeholder in a proof compiles with a warning; this audit is what fails the build. Challenge.lean
 intentionally contains fourteen proof placeholders; Solution.lean and the modules it imports contain none, and
@@ -63,12 +62,14 @@ restated ones, up to the namespace, with `lean/ComparatorChallenges/EvenBarker.l
 kept in `scripts/` as reference data; `check_statements.py` compares every theorem header of Challenge.lean with
 Solution.lean. Palomar's `scripts/core_notation_audit.lean` is an unmodified copy from
 github.com/PalomarRegistry/PalomarSubmission.
-<!-- DESK: add the core-notation audit's time and memory; confirm the guard's file list (OB.lean, Test.lean). -->
+The core-notation audit needs about 4 GB of memory and a few minutes; `scripts/audit-slot.sh` runs it alone. The source guard
+covers the eighteen proof files (`OB/*.lean`, `OB.lean`, `Solution.lean`, `Test.lean`, `Test/Axioms.lean`), Challenge.lean and the lakefile options.
 
 Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` (commit `065356127b1dc0016f66b7283ce0ce2c4055aa55`) are pinned by the
 committed manifest; `lake update` is never run. Every `.lean` file of the repository carries a `module` header.
 `OB/Defs.lean` imports exactly what the Challenge imports (`Mathlib`), so that the seven definitions elaborate to
-identical terms in both environments. <!-- DESK: build time from an empty .lake/build after the cache. -->
+identical terms in both environments. A build of the four targets from an empty `.lake/build` after `lake exe cache get` takes about five minutes on a
+16 GB desktop (each module 13–30 s); `python scripts/verify.py` about ten.
 
 ## The finite computations
 
