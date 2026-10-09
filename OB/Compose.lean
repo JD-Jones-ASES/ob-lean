@@ -73,5 +73,4 @@ theorem co_not_isBarker_of_odd_gt {n : ℕ} (h : Fin n → ℤ) (hn : Odd n) (h1
   have := co_length_le_thirteen_of_odd h hn hb
   omega
 
-
 end OddBarker
