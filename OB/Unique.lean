@@ -9,10 +9,12 @@ alternation
 Schmidt–Willms's introduction: `h ↦ (-1)^(a + b j) h j` preserves the Barker property, and the only
 Barker sequences beginning `+ +` of odd length are `a3, a5, a7, a11, a13` (and `a1 = [1]`). In Lean:
 for odd `n` and a Barker `h`, some `ε ∈ {1, -1}` has `h = ε • canon n` or `h = ε • alt (canon n)`.
-Route: `odd_length_mem_internal` fixes `n`; skew-symmetry (`skew_internal`) determines `h` from its
-first `(n + 1)/2` values; the remaining `2^((n+1)/2)` sign patterns (`128` at `n = 13`) are checked
-by the kernel (a `Nat`-coded enumeration, `decide +kernel`, never `native_decide`), or any smaller
-route the lane finds. Kill: 2.5 h of lane time, or a kernel check above 10 minutes.
+Route: `odd_length_mem_internal` fixes `n`. At each of the six lengths the kernel enumerates every
+`±1` list of length `n` (`un_all n`, `2^n` lists, `8192` at `n = 13`) and checks by `decide +kernel`
+(never `native_decide`) that each list passing the list form of the Barker test (`un_bark`) is one of
+the four listed sequences (`un_ans n`). `un_ac_ofFn` identifies the list autocorrelation of
+`List.ofFn h` with `aperiodic h`, so `List.ofFn h` passes; `List.ofFn_injective` returns the equation
+to `h`. Skew-symmetry is not needed. The whole module builds in about 30 seconds.
 
 Lane: **unique** (stretch).
 -/
