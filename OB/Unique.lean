@@ -72,7 +72,9 @@ theorem un_ac_ofFn {n : ℕ} (h : Fin n → ℤ) (k : ℕ) :
   · simp
   · intro i h1 h2
     simp only [List.getElem_zipWith, List.getElem_drop, List.getElem_ofFn]
-    congr 2 <;> (try simp only [Fin.ext_iff, Fin.val_mk]) <;> omega
+    congr 2
+    simp only [Fin.ext_iff]
+    omega
 
 theorem un_bark_of {n : ℕ} {h : Fin n → ℤ} (hb : IsBarker h) : un_bark (List.ofFn h) = true := by
   unfold un_bark
