@@ -21,8 +21,6 @@ the signs:
   is not (`skew_pair`), so two of `n - s, n - s - 1, n - s - 2` are multiples of `p ≥ 3`;
   `q` odd (`doubling_seq` at `u = q/2`);
 * `n ≤ p + q + 1` (`key_bound` with `fold_seq` at `p + q - 2` and `p + q`, if `p + q + 3 ≤ n`).
-
-Lane: **runs**.
 -/
 
 @[expose] public section

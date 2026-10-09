@@ -4,7 +4,9 @@ All fourteen statements of Challenge.lean have proofs. The local build, the axio
 definition and statement checks, the module-resolution check, the elaboration check and Palomar's core-notation
 audit of the statements pass; `python scripts/verify.py` runs them all and ends with `VERIFY: PASS`. The checks
 below were last run on the tree of the final commit; a build log is evidence for that tree only. Theorems are
-numbered as in `comparator.json`, which is also their order in Challenge.lean.
+numbered as in `comparator.json`, which is also their order in Challenge.lean. `comparator.json` lists no
+`definition_names`: a name there is a definition hole whose value the Solution supplies; the eight definitions
+here are fully specified in the Challenge, so the comparator checks the Solution's values against them.
 
 ## Formal scope
 
@@ -39,11 +41,12 @@ python scripts/verify.py --fetch-cache
 ```
 
 runs, in order: the pins (`lean-toolchain` and the Mathlib revision of `lake-manifest.json` are the committed ones),
-`scripts/check-source.py`, `scripts/check_definitions.py`, `scripts/check_statements.py`, `lake build` of the four
+`scripts/check-source.py`, `scripts/check_definitions.py`, `scripts/check_statements.py`, `scripts/check_barker.py`, the metadata check (formalization.yaml parses; its
+title length, main results and alignment; `comparator.json` lists no definition holes), `lake build` of the four
 targets `OB`, `Challenge`, `Solution`, `Test`, `lake env python scripts/check_module_resolution.py`, the elaboration
 check (every compared definition printed with `pp.all` from the Challenge and from `OB.Defs`; the outputs must be
-identical), and Palomar's `scripts/core_notation_audit.lean` on the twenty-two compared declarations of
-`comparator.json` (fourteen theorems, eight definitions); the last line is `VERIFY: PASS` or `VERIFY: FAIL`.
+identical), and Palomar's `scripts/core_notation_audit.lean` on the twenty-two declarations of the statement surface (the
+fourteen compared theorems of `comparator.json` and the eight definitions); the last line is `VERIFY: PASS` or `VERIFY: FAIL`.
 `--skip-build` leaves out the four Lean steps.
 
 The `Test` target imports `Solution` and audits every constant of its environment whose name begins with
@@ -60,14 +63,14 @@ restated ones, up to the namespace, with `lean/ComparatorChallenges/EvenBarker.l
 `lean/ComparatorChallenges/CirculantHadamard.lean` (`RealMatrix`, `IsCirculant`, `IsSignHadamard`,
 `ExistsRealCirculantHadamard`) of openai/math at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, whose copies are
 kept in `scripts/` as reference data; `check_statements.py` compares every theorem header of Challenge.lean with
-Solution.lean. Palomar's `scripts/core_notation_audit.lean` is an unmodified copy from
-github.com/PalomarRegistry/PalomarSubmission.
-The core-notation audit needs about 4 GB of memory and a few minutes; `scripts/audit-slot.sh` runs it alone. The source guard
+Solution.lean. Palomar's `scripts/core_notation_audit.lean` is a copy from github.com/PalomarRegistry/PalomarSubmission (MIT; see
+NOTICE), unmodified apart from a three-line provenance comment at its head.
+The core-notation audit needs about 4 GB of memory and a few minutes; run it with no other Lean process active. The source guard
 covers the eighteen proof files (`OB/*.lean`, `OB.lean`, `Solution.lean`, `Test.lean`, `Test/Axioms.lean`), Challenge.lean and the lakefile options.
 
 Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` (commit `065356127b1dc0016f66b7283ce0ce2c4055aa55`) are pinned by the
 committed manifest; `lake update` is never run. Every `.lean` file of the repository carries a `module` header.
-`OB/Defs.lean` imports exactly what the Challenge imports (`Mathlib`), so that the seven definitions elaborate to
+`OB/Defs.lean` imports exactly what the Challenge imports (`Mathlib`), so that the eight definitions elaborate to
 identical terms in both environments. A build of the four targets from an empty `.lake/build` after `lake exe cache get` takes about five minutes on a
 16 GB desktop (each module 13–30 s); `python scripts/verify.py` about ten.
 
@@ -81,7 +84,7 @@ uniqueness theorem's six enumerations `un_check1 … un_check13` (`decide +kerne
 `n`, `2ⁿ` lists, 8,192 at `n = 13`: each list that passes the list form of the Barker test is one of the four
 listed sequences; about 30 s for the module). Everything else is
 `omega` over residues and divisibility, `ring`/`linear_combination` identities, and big-operator rewriting.
-`scripts/check_barker.py` (Python 3.9+, standard library, about 12 s) is a cross-check no Lean proof depends on:
+`scripts/check_barker.py` (Python 3.9+, standard library, under a minute) is a cross-check no Lean proof depends on:
 an outside-in exhaustive search of every `±1` sequence of length 1 to 45 (lengths 1, 2, 3, 4, 5, 7, 11, 13 with
 2, 4, 4, 8, 4, 4, 4, 4 sequences; a plain `2ⁿ` enumeration agrees to `n = 16`), the statements `aperiodic_eq`,
 `skew`, `fold`, `doubling` and `run_bounds` evaluated as written on every odd sequence found, the circulant Gram

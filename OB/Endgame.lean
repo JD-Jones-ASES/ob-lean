@@ -20,8 +20,6 @@ So `n ∈ {7, 11, 13}` (`endgame`). The alternation `alt h j = (-1)^j h j` multi
 `(-1)^k` and so preserves `IsBarker`; it makes `h 0 = h 1` hold. With `p`, `q` from `Nat.find`
 (`exists_q` and `skew_pair` at `s = 1` for the first change), `odd_length_mem_internal` follows for
 `n ≥ 7`; `n ≤ 5` is in the list.
-
-Lane: **endgame**.
 -/
 
 @[expose] public section

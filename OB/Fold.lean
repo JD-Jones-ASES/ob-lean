@@ -12,8 +12,6 @@ by skew-symmetry turns it into `(-1)^((n-1)/2) T0 a w`; so `T0 a w = 1` (`fold_s
 `T0 a (2j)` at its middle term gives `∑_{k < j} (-1)^k a k a (2j - k) = (1 - (-1)^j)/2`, and counting
 signs (`prod_signs`) gives `∏_{k < j} a k a (2j - k) = 1`, i.e. `∏_{i ≤ 2j} a i = a j` (`prod_prefix`);
 two consecutive `j` give `a (u - 1) a u = a (2u - 1) a (2u)` for `1 ≤ u ≤ (n - 3)/2` (`doubling_seq`).
-
-Lane: **fold**.
 -/
 
 @[expose] public section

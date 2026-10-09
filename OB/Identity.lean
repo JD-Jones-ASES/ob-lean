@@ -8,8 +8,7 @@ public import OB.Defs
 `T0 a w = ∑_{k ≤ w} (-1)^k a k a (w - k)`. For even `w` and any `a : ℕ → ℤ`,
 `T0 a (w + 2) - T0 a w = 2 a 0 Δ(w + 1) - ∑_{t ≤ w} (-1)^t Δ t Δ (w - t)` with `Δ t = a (t+1) - a t`:
 the generating-function identity `(1 - x²) a(x) a(-x) = [(1 - x) a(x)] [(1 + x) a(-x)]` read off at
-`x^{w+2}`. This is the identity behind Schmidt–Willms's Lemma 4. Ported from the bench probes of
-2026-10-06 (lane K2).
+`x^{w+2}`. This is the identity behind Schmidt–Willms's Lemma 4.
 -/
 
 @[expose] public section

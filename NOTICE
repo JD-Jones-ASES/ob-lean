@@ -22,3 +22,8 @@ What is derived:
 No other part of openai/math is included. Unless required by applicable law or agreed to in writing,
 the derived portions are distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, either express or implied, as the Apache License states.
+
+scripts/core_notation_audit.lean is a copy of scripts/core_notation_audit.lean of
+https://github.com/PalomarRegistry/PalomarSubmission, Copyright (c) 2026 Kim Morrison, MIT License (the
+permission notice is in LICENSES/PalomarSubmission-MIT.txt); the only change is a three-line provenance
+comment at its head. It is used locally to check the statement surface and is not built.

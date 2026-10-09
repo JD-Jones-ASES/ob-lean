@@ -7,11 +7,14 @@ public import Mathlib
 
 A Barker sequence of length `n` is a `±1` sequence `h : Fin n → ℤ` whose aperiodic autocorrelations
 `C(k) = ∑_{j < n - k} h j * h (j + k)`, `0 < k < n`, all have absolute value at most one. Turyn and
-Storer (*On binary sequences*, Proc. Amer. Math. Soc. 12 (1961) 394–399) proved that a Barker
-sequence of odd length has length at most 13, and that the odd lengths that occur are 1, 3, 5, 7, 11
-and 13; their Theorem 1(iv), used by that proof, is false as stated (Willms, arXiv:1404.4833), and
-the proof formalized here is that of Schmidt and Willms (*Barker sequences of odd length*, Des.
-Codes Cryptogr. 80 (2016) 409–414, arXiv:1501.06035), recast so that no enumeration of sequences is needed.
+Storer (*On binary sequences*, Proc. Amer. Math. Soc. 12 (1961) 394–399) stated, and gave a proof,
+that a Barker sequence of odd length `n > 1` has length 3, 5, 7, 11 or 13 (length 1 is admitted here:
+it has no nontrivial shift). Theorem 1(iv) of Turyn–Storer, on which their proof relies, is false as
+stated (Willms 2014, arXiv:1404.4833, explicit counterexamples); per Schmidt and Willms (footnote 1)
+parts (ii) and (iii) imply (iv) on a corrected range that suffices for the induction, and independent
+proofs exist. The proof formalized here is that of Schmidt and Willms (*Barker sequences of odd
+length*, Des. Codes Cryptogr. 80 (2016) 409–414, arXiv:1501.06035), recast so that the classification
+needs no enumeration of sequences.
 This file states, and `Solution.lean` proves:
 
 * the classification: a Barker sequence of odd length `n` exists exactly when
@@ -32,7 +35,8 @@ This file states, and `Solution.lean` proves:
 * the even reduction of Turyn and Storer: an even-length Barker sequence of length `n > 2` has
   `4 ∣ n` and yields a real circulant Hadamard matrix of order `n` (`four_dvd_of_even`,
   `existsRealCirculantHadamard_of_even`); hence, if real circulant Hadamard matrices of positive
-  order exist only at orders 1 and 4 (the statement `exists_iff_order_one_or_four` of `openai/math`),
+  order exist only at orders 1 and 4 (the forward direction of the statement `exists_iff_order_one_or_four`
+  of `openai/math`),
   the same two conclusions follow (`exists_iff_of_circulantHadamard`,
   `length_le_thirteen_of_circulantHadamard`).
 
@@ -40,7 +44,8 @@ This file states, and `Solution.lean` proves:
 `openai/math` character for character, and `RealMatrix`, `IsCirculant`, `IsSignHadamard` and
 `ExistsRealCirculantHadamard` repeat `lean/ComparatorChallenges/CirculantHadamard.lean` (commit
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`, Apache-2.0; see NOTICE), so that the two theorems of that
-project discharge the hypotheses of the conditional theorems below by unfolding alone.
+project discharge the hypotheses of the conditional theorems below (the even-length theorem by unfolding
+alone, the circulant Hadamard theorem by unfolding and `Iff.mp`).
 
 This Mathlib-only file intentionally contains placeholders; the corresponding Solution declarations
 are proved in a separate environment.
@@ -83,8 +88,8 @@ def IsSignHadamard {n : ℕ} (H : RealMatrix n) : Prop :=
 def ExistsRealCirculantHadamard (n : ℕ) : Prop :=
   ∃ H : RealMatrix n, IsCirculant H ∧ IsSignHadamard H
 
-/-- The listed Barker sequence of each odd length (`fun _ => 1` at other lengths): the sequences of
-Schmidt–Willms's introduction, normalised to begin `+ +`. -/
+/-- The listed Barker sequence of each odd length: `[1]` at length 1, and at 3, 5, 7, 11, 13 the sequences
+`A₃`, …, `A₁₃` of Schmidt–Willms's introduction (which begin `+ +`); `fun _ => 1` at other lengths. -/
 def canon : (n : ℕ) → Fin n → ℤ
   | 1 => ![1]
   | 3 => ![1, 1, -1]
@@ -96,8 +101,8 @@ def canon : (n : ℕ) → Fin n → ℤ
 
 /-! ### The classification of odd lengths -/
 
-/-- A Barker sequence of odd length has length 1, 3, 5, 7, 11 or 13 (Turyn–Storer 1961, Theorem 2
-with the list of the introduction; the proof of Schmidt–Willms 2016). -/
+/-- A Barker sequence of odd length has length 1, 3, 5, 7, 11 or 13 (Turyn–Storer 1961, Theorem 2 and
+the introduction's list for `n > 1`; the proof of Schmidt–Willms 2016; length 1 is trivial). -/
 theorem odd_length_mem {n : ℕ} (h : Fin n → ℤ) (hn : Odd n) (hb : IsBarker h) :
     n = 1 ∨ n = 3 ∨ n = 5 ∨ n = 7 ∨ n = 11 ∨ n = 13 := by
   sorry

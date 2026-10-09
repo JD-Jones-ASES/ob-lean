@@ -1,6 +1,6 @@
 # check_barker.py
 
-`python3 scripts/check_barker.py` (Python 3.9 or later, standard library only, exact integers, about 10 s) prints `VERDICT: PASS` and exits 0 only if every check below holds; any failure prints a `FAIL` line, `VERDICT: FAIL` and a nonzero exit.
+`python3 scripts/check_barker.py` (Python 3.9 or later, standard library only, exact integers, under a minute) prints `VERDICT: PASS` and exits 0 only if every check below holds; any failure prints a `FAIL` line, `VERDICT: FAIL` and a nonzero exit.
 
 - **Search.** Every Barker sequence of length 1 to 45, by an outside-in backtracking search, each one re-checked by recomputing every autocorrelation, and the sets for lengths up to 16 compared with a plain enumeration of all 2^n sequences: lengths 1, 2, 3, 4, 5, 7, 11, 13 with 2, 4, 4, 8, 4, 4, 4, 4 sequences. The eight witnesses in `OB/Witnesses.lean` are among them.
 - **Statements.** On every odd Barker sequence found, `aperiodic_eq`, `skew`, `fold`, `doubling` and `run_bounds` as written in `Challenge.lean` (natural-number subtraction and divisibility included). On every even one of length > 2: 4 | n, and the circulant matrix satisfies H Hᵀ = nI.

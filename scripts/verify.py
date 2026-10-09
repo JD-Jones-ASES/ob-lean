@@ -5,7 +5,8 @@
 
 In order: the pins (lean-toolchain and the Mathlib revision of lake-manifest.json are the committed
 ones), the source guard, the definition comparison against the two challenge files of openai/math, the statement
-comparison between Challenge.lean and Solution.lean, the exact certificates under note/ (none in this repository), scripts/check_barker.py, the Lean
+comparison between Challenge.lean and Solution.lean, the metadata (formalization.yaml parses; its title length,
+main results and alignment against comparator.json; no definition holes; no original-proof source), the exact certificates under note/ (none in this repository), scripts/check_barker.py, the Lean
 build of every target (including the Test audit, which fails on any axiom beyond propext,
 Classical.choice and Quot.sound), the module-resolution check, the elaboration check of the compared
 definitions (printed with pp.all from the Challenge and from OB.Defs, which must agree exactly,
@@ -25,6 +26,12 @@ ROOT = Path(__file__).resolve().parents[1]
 TOOLCHAIN = "leanprover/lean4:v4.35.0-rc2"
 MATHLIB_REV = "065356127b1dc0016f66b7283ce0ce2c4055aa55"
 TARGETS = ["OB", "Challenge", "Solution", "Test"]
+# The eight compared definitions. They are fully specified in the Challenge, so comparator.json lists none of
+# them in definition_names (a name there is a definition HOLE whose value the Solution supplies); the
+# elaboration check and the notation audit below still cover all eight.
+DEFINITIONS = ["OddBarker.IsSign", "OddBarker.aperiodic", "OddBarker.IsBarker", "OddBarker.RealMatrix",
+               "OddBarker.IsCirculant", "OddBarker.IsSignHadamard", "OddBarker.ExistsRealCirculantHadamard",
+               "OddBarker.canon"]
 
 
 def run(args, **kw):
@@ -61,6 +68,46 @@ def check_certificates():
     return ok
 
 
+def check_yaml():
+    """formalization.yaml parses; its title is within the registry's limit; its main_results match comparator.json;
+    its alignment covers every compared theorem; comparator.json lists no definition holes; no original-proof
+    source. With jsonschema installed and scripts/formalization.schema.json present, also validates the schema."""
+    try:
+        import yaml
+    except ImportError:
+        return step("formalization.yaml", False, "PyYAML is not installed (pip install pyyaml)")
+    data = yaml.safe_load((ROOT / "formalization.yaml").read_text(encoding="utf-8"))
+    config = json.loads((ROOT / "comparator.json").read_text(encoding="utf-8"))
+    problems = []
+    title = data["project"]["name"]
+    if len(title) > 300:
+        problems.append(f"title has {len(title)} characters (limit 300)")
+    mains = [m["declaration"] for m in data["status"]["main_results"]]
+    if mains != config["theorem_names"]:
+        problems.append("status.main_results differ from comparator.json theorem_names")
+    aligned = {a["lean"] for a in data.get("alignment", {}).get("statements", [])}
+    gap = set(config["theorem_names"]) - aligned
+    if gap:
+        problems.append("alignment.statements misses " + ", ".join(sorted(gap)))
+    if config.get("definition_names"):
+        problems.append("comparator.json lists definition holes; this entry's definitions are fully specified")
+    if any(src.get("type") == "original-proof" for src in data.get("sources", [])):
+        problems.append("an original-proof source would force other/background on every other source")
+    schema = ROOT / "scripts" / "formalization.schema.json"
+    if schema.exists():
+        try:
+            import jsonschema
+            jsonschema.validate(data, json.loads(schema.read_text(encoding="utf-8")))
+        except ImportError:
+            problems.append("jsonschema is not installed; schema not validated")
+        except Exception as error:  # the validator's first line is the message
+            problems.append("schema: " + str(error).splitlines()[0])
+    detail = "; ".join(problems) if problems else (
+        f"parses; title {len(title)} chars; {len(mains)} main results; {len(data['sources'])} sources"
+        + ("; schema valid" if schema.exists() else ""))
+    return step("formalization.yaml", not problems, detail)
+
+
 def check_build():
     ok = True
     for target in TARGETS:
@@ -82,7 +129,7 @@ def check_definition_elaboration():
     definitions module, must agree exactly: the comparator judges the elaborated constants, which
     depend on the imports through instance resolution."""
     config = json.loads((ROOT / "comparator.json").read_text(encoding="utf-8"))
-    names = config["definition_names"]
+    names = DEFINITIONS
     scratch = ROOT / ".scratch"
     scratch.mkdir(exist_ok=True)
     outputs = []
@@ -103,17 +150,17 @@ def check_notation_audit():
     args = ["lake", "env", "lean", "--run", "scripts/core_notation_audit.lean", config["challenge_module"]]
     for name in config["theorem_names"]:
         args += ["theorem", name]
-    for name in config["definition_names"]:
+    for name in DEFINITIONS:
         args += ["def", name]
     result = run(args, capture_output=True)
     try:
         rows = json.loads(result.stdout)
     except ValueError:
         rows = []
-    expected = len(config["theorem_names"]) + len(config["definition_names"])
+    expected = len(config["theorem_names"]) + len(DEFINITIONS)
     names = {row.get("name") for row in rows} if isinstance(rows, list) else set()
     ok = result.returncode == 0 and len(names) == expected and \
-        names == set(config["theorem_names"]) | set(config["definition_names"])
+        names == set(config["theorem_names"]) | set(DEFINITIONS)
     return step("core-notation audit", ok, f"{len(names)} of {expected} declarations printed")
 
 
@@ -126,6 +173,7 @@ def main():
     ok &= check_script("statements", ["scripts/check_statements.py"])
     ok &= check_certificates()
     ok &= check_script("check_barker.py (the standard-library certificate)", ["scripts/check_barker.py"])
+    ok &= check_yaml()
     if not skip_build:
         if fetch:
             ok &= step("lake exe cache get", run(["lake", "exe", "cache", "get"]).returncode == 0)

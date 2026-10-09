@@ -51,8 +51,8 @@ def IsSignHadamard {n : ℕ} (H : RealMatrix n) : Prop :=
 def ExistsRealCirculantHadamard (n : ℕ) : Prop :=
   ∃ H : RealMatrix n, IsCirculant H ∧ IsSignHadamard H
 
-/-- The listed Barker sequence of each odd length (`fun _ => 1` at other lengths): the sequences of
-Schmidt–Willms's introduction, normalised to begin `+ +`. -/
+/-- The listed Barker sequence of each odd length: `[1]` at length 1, and at 3, 5, 7, 11, 13 the sequences
+`A₃`, …, `A₁₃` of Schmidt–Willms's introduction (which begin `+ +`); `fun _ => 1` at other lengths. -/
 def canon : (n : ℕ) → Fin n → ℤ
   | 1 => ![1]
   | 3 => ![1, 1, -1]

@@ -11,8 +11,6 @@ and `xy ≡ x - y + 1 (mod 4)` for signs gives `C(u) + C(n - u) ≡ n (mod 4)`
 nontrivial autocorrelation: `0` at odd shifts, `(-1)^((n-1)/2)` at even ones (`aperiodic_eq_internal`).
 For even `n`, even shifts vanish by parity alone (`even_shift_zero_of_even`); the Hadamard module uses
 the mod-four congruence at `u = 2` to get `4 ∣ n`.
-
-Lane: **parity**.
 -/
 
 @[expose] public section

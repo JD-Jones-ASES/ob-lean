@@ -134,9 +134,11 @@ reversal lands in the same orbit.
 
 ## Relation to the sources
 
-Turyn and Storer's Theorem 2 states `n ≤ 13` for odd `n`; the list `{1, 3, 5, 7, 11, 13}` is in their
-introduction. Theorem 1(iv) of Turyn–Storer is false as stated (Willms 2014); per Schmidt–Willms the induction
-survives with a corrected range; the theorem itself was never in doubt. Nothing of Theorem 1 is used here.
+Turyn and Storer's Theorem 2 states `n ≤ 13` for odd `n`; the list `{3, 5, 7, 11, 13}` (for `n > 1`) is in their
+introduction, and length 1 is added here. Theorem 1(iv) of Turyn–Storer, on which their proof relies, is false as stated (Willms 2014,
+arXiv:1404.4833, explicit counterexamples); per Schmidt–Willms (footnote 1) parts (ii) and (iii) imply (iv) on a
+corrected range that suffices for the induction, and independent proofs exist (Borwein–Erdélyi 2013; Schmidt–Willms
+2016, the proof formalized here). Nothing of Theorem 1 is used here.
 Schmidt–Willms's Lemma 2 is `aperiodic_eq`, (S) and (D) (`skew`, `doubling`); their Lemmas 3 and 4 are
 `run_bounds`; their final three cases are `endgame`. The recast differs from the paper in three places: (F) is
 stated once and (D) and Lemma 4 are derived from it; `p` and `q` are defined directly on the sign changes, without

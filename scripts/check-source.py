@@ -14,10 +14,10 @@ import re
 import sys
 
 FORBIDDEN = re.compile(
-    r"\b(?:sorry|sorryAx|admit|axiom|unsafe|partial|native_decide|implemented_by|extern)\b"
+    r"\b(?:sorry|sorryAx|admit|axiom|unsafe|partial|native_decide|implemented_by|extern|mutual|opaque|csimp|ofReduceNat)\b"
     r"|\b(?:Lean\.)?ofReduceBool\b|\bdebug\.skipKernelTC\b|\bdebug\.byAsSorry\b")
 CHALLENGE_FORBIDDEN = re.compile(
-    r"\b(?:sorryAx|admit|axiom|unsafe|partial|native_decide|implemented_by|extern)\b"
+    r"\b(?:sorryAx|admit|axiom|unsafe|partial|native_decide|implemented_by|extern|mutual|opaque|csimp|ofReduceNat)\b"
     r"|\b(?:Lean\.)?ofReduceBool\b|\bdebug\.skipKernelTC\b|\bdebug\.byAsSorry\b")
 LAKEFILE_DEBUG = re.compile(r"^\s*debug\.")
 

@@ -10,8 +10,6 @@ public import OB.Witnesses
 `exists_iff_of_even_internal` and `length_le_thirteen_of_even_internal` with the even-length
 statement of `openai/math` (`even_length_eq_two_or_four`) as the hypothesis `heven`, in exactly its
 shape (implicit `n`), so that it is discharged by the theorem itself.
-
-Lane: **compose**.
 -/
 
 @[expose] public section

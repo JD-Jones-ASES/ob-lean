@@ -3,11 +3,12 @@ module
 public import OB.Compose
 
 /-!
-# Uniqueness (stretch): every Barker sequence of odd length is the listed one up to negation and
+# Uniqueness: every Barker sequence of odd length is the listed one up to negation and
 alternation
 
-Schmidt–Willms's introduction: `h ↦ (-1)^(a + b j) h j` preserves the Barker property, and the only
-Barker sequences beginning `+ +` of odd length are `a3, a5, a7, a11, a13` (and `a1 = [1]`). In Lean:
+Schmidt–Willms's introduction: `h ↦ (-1)^(a + b j) h j` preserves the Barker property, and it lists the
+known Barker sequences beginning `+ +` of odd length, `a3, a5, a7, a11, a13` (and `a1 = [1]`); that they are
+the only ones is what this module proves. In Lean:
 for odd `n` and a Barker `h`, some `ε ∈ {1, -1}` has `h = ε • canon n` or `h = ε • alt (canon n)`.
 Route: `odd_length_mem_internal` fixes `n`. At each of the six lengths the kernel enumerates every
 `±1` list of length `n` (`un_all n`, `2^n` lists, `8192` at `n = 13`) and checks by `decide +kernel`
@@ -15,15 +16,13 @@ Route: `odd_length_mem_internal` fixes `n`. At each of the six lengths the kerne
 the four listed sequences (`un_ans n`). `un_ac_ofFn` identifies the list autocorrelation of
 `List.ofFn h` with `aperiodic h`, so `List.ofFn h` passes; `List.ofFn_injective` returns the equation
 to `h`. Skew-symmetry is not needed. The whole module builds in about 30 seconds.
-
-Lane: **unique** (stretch).
 -/
 
 @[expose] public section
 
 namespace OddBarker
 
-/-! ## The enumeration (lane helpers, prefix `un_`) -/
+/-! ## The enumeration (helpers, prefix `un_`) -/
 
 /-- The aperiodic autocorrelation of a list at shift `k`. -/
 def un_ac (L : List ℤ) (k : ℕ) : ℤ := (List.zipWith (· * ·) L (L.drop k)).sum

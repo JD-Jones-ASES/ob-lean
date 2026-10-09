@@ -2,15 +2,16 @@
 
 A Barker sequence of length `n` is a `±1` sequence `h₀, …, h_{n−1}` whose aperiodic autocorrelations
 `C(k) = ∑_{j<n−k} h_j h_{j+k}`, `0 < k < n`, all satisfy `|C(k)| ≤ 1`. Turyn and Storer (*On binary sequences*,
-Proc. Amer. Math. Soc. 12 (1961) 394–399) proved that a Barker sequence of odd length has length 1, 3, 5, 7, 11
-or 13. Theorem 1(iv) of Turyn–Storer, on which their proof relies, is false as stated (Willms 2014,
+Proc. Amer. Math. Soc. 12 (1961) 394–399) stated, and gave a proof, that a Barker sequence of odd length `n > 1`
+has length 3, 5, 7, 11 or 13 (length 1 is admitted here: it has no nontrivial shift). Theorem 1(iv) of Turyn–Storer, on which their proof relies, is false as stated (Willms 2014,
 arXiv:1404.4833, explicit counterexamples); per Schmidt–Willms (footnote 1) parts (ii) and (iii) imply (iv) on a
-corrected range that suffices for the induction; the theorem itself was never in doubt. The proof formalized here is
+corrected range that suffices for the induction, and independent proofs exist (Borwein–Erdélyi 2013; Schmidt–Willms
+2016, the proof formalized here). The proof formalized here is
 Schmidt and Willms's (*Barker sequences of odd length*, Des. Codes Cryptogr. 80 (2016) 409–414,
 arXiv:1501.06035), recast so that no enumeration of sequences is needed.
 
-With the seven definitions restated character for character (and one of its own, `canon`) from two challenge files of openai/math at commit
-`adc7f124` (Apache-2.0, see [NOTICE](NOTICE); namespace `OddBarker`), [Challenge.lean](Challenge.lean) states
+With seven definitions restated character for character from two challenge files of openai/math at commit
+`adc7f124` (Apache-2.0, see [NOTICE](NOTICE); namespace `OddBarker`) and one of its own (`canon`), [Challenge.lean](Challenge.lean) states
 fourteen theorems and [Solution.lean](Solution.lean) proves them, kernel-only; the table in
 [VERIFICATION.md](VERIFICATION.md) names each one. Unconditionally:
 
@@ -23,7 +24,10 @@ fourteen theorems and [Solution.lean](Solution.lean) proves them, kernel-only; t
   `n ≥ 7` and `h₀ = h₁`, with `p` the first sign change and `q` the first one not divisible by `p`, both are odd
   and `2q − 3 ≤ n ≤ p + q + 1` (`run_bounds`);
 - Turyn–Storer's even reduction: a Barker sequence of even length `n > 2` has `4 ∣ n` and yields a real circulant
-  Hadamard matrix of order `n` (`four_dvd_of_even`, `existsRealCirculantHadamard_of_even`).
+  Hadamard matrix of order `n` (`four_dvd_of_even`, `existsRealCirculantHadamard_of_even`); these re-prove, in this
+  environment, openai/math's `four_dvd_length` and `existsRealCirculantHadamard_of_even_barker`, and the circulant
+  composition below is the argument of its `even_length_eq_two_or_four` — what this entry adds is the odd half, the
+  structure theorems and the uniqueness theorem.
 
 Given the even-length classification as an explicit hypothesis (every Barker sequence of positive even length has
 length 2 or 4: `even_length_eq_two_or_four` of openai/math, family 179), Barker sequences of positive length exist
@@ -31,8 +35,8 @@ exactly at `n ∈ {1, 2, 3, 4, 5, 7, 11, 13}`, and every Barker sequence has len
 (`exists_iff_of_even`, `length_le_thirteen_of_even`). The same follows, through the even reduction, from the
 hypothesis that real circulant Hadamard matrices of positive order exist only at orders 1 and 4 (the forward
 direction of openai/math's `exists_iff_order_one_or_four`; `exists_iff_of_circulantHadamard`,
-`length_le_thirteen_of_circulantHadamard`). Both hypotheses are stated as openai/math states them, so its two
-theorems discharge them by unfolding alone.
+`length_le_thirteen_of_circulantHadamard`). Both hypotheses are stated in openai/math's own terms, so its two theorems discharge them:
+`even_length_eq_two_or_four` by unfolding alone, `exists_iff_order_one_or_four` by unfolding and `Iff.mp`.
 
 Not claimed: the even-length classification and the circulant Hadamard theorem themselves (openai/math catalogues
 Lean proofs of both, at Lean v4.34.1, not registered on Palomar and not checked here); Turyn–Storer's Theorem 1.
@@ -40,12 +44,12 @@ Lean proofs of both, at Lean v4.34.1, not registered on Palomar and not checked 
 > As of 2026-10-09 (UTC), no formalization of the odd-length classification was located in openai/math (whose
 > scope note for family 179 leaves the odd lengths out), the Palomar registry, formal-conjectures (which states
 > the Barker conjecture, length at most 13, as open), Mathlib, the Isabelle AFP, Lean Pool, Hexagon, the Lean
-> Zulip, or GitHub's Lean code.
+> Zulip, or GitHub's Lean code. Submissions under review at Palomar are not visible in its data API.
 
 Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` (commit `065356127b1dc0016f66b7283ce0ce2c4055aa55`) are pinned by the
 committed manifest; there are no GitHub Actions workflows. `python scripts/verify.py --fetch-cache` runs every
 check (the pins, the source guard, the definition comparison against openai/math, the statement comparison, the
-build with the axiom audit, module resolution, the elaboration check of the eight definitions, and Palomar's
+standard-library checker `scripts/check_barker.py`, the build with the axiom audit, module resolution, the elaboration check of the eight definitions, and Palomar's
 core-notation audit); [VERIFICATION.md](VERIFICATION.md) lists them and their limits, [PROOF.md](PROOF.md) gives the
 mathematics with the Lean name of every step, and [DISCLOSURE.md](DISCLOSURE.md) the assistance statement.
 

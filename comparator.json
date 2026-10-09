@@ -17,16 +17,7 @@
     "OddBarker.exists_iff_of_circulantHadamard",
     "OddBarker.length_le_thirteen_of_circulantHadamard"
   ],
-  "definition_names": [
-    "OddBarker.IsSign",
-    "OddBarker.aperiodic",
-    "OddBarker.IsBarker",
-    "OddBarker.RealMatrix",
-    "OddBarker.IsCirculant",
-    "OddBarker.IsSignHadamard",
-    "OddBarker.ExistsRealCirculantHadamard",
-    "OddBarker.canon"
-  ],
+  "definition_names": [],
   "permitted_axioms": [
     "propext",
     "Quot.sound",

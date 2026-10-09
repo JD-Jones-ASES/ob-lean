@@ -6,10 +6,7 @@ public import OB.Defs
 # The Barker sequences of lengths 1, 2, 3, 4, 5, 7, 11, 13
 
 The sequences of Schmidt–Willms's introduction (normalised to begin `+ +`), each checked by
-`decide` shift by shift. The length-13 witness and its forged control were checked at the bench on
-2026-10-06 (lane K2).
-
-Lane: **witnesses**.
+`decide` shift by shift. 
 -/
 
 @[expose] public section

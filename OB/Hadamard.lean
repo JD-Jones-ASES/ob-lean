@@ -17,9 +17,8 @@ with the circulant Hadamard statement of `openai/math` (`exists_iff_order_one_or
 hypothesis `hcirc` in its `→` direction) gives the even half, hence the full classification.
 
 The route follows `lean/OAI/LinearAlgebra/Barker/{Parity,Wraparound,PeriodicModFour,Main}.lean` of
-`openai/math` in outline (Apache-2.0; see NOTICE); the proofs here are written for this repository.
-
-Lane: **hadamard**.
+`openai/math` in outline (Apache-2.0; see NOTICE); the proofs here are written for this repository except where
+a docstring says it adapts one of those files.
 -/
 
 @[expose] public section
@@ -120,6 +119,8 @@ theorem periodic_eq_aperiodic_add {n : ℕ} [NeZero n] (h : Fin n → ℤ) (a : 
   change (∑ j : Fin n, f j) = _
   rw [split, low, high, add_comm]
 
+/-- The periodic autocorrelation vanishes off the peak for an even Barker sequence of length `> 2`. Adapts
+`periodic_offpeak_zero` of openai/math lean/OAI/LinearAlgebra/Barker/Main.lean. -/
 theorem periodic_offpeak_zero {n : ℕ} [NeZero n] {h : Fin n → ℤ} (hb : IsBarker h) (hn : Even n)
     (h2 : 2 < n) (a : Fin n) (ha : a ≠ 0) : periodic h a = 0 := by
   have ha0 : 0 < a.val := by

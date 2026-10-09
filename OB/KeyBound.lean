@@ -9,7 +9,7 @@ public import OB.Identity
 not divisible by `p`; both odd, `2 ≤ p < q`. If the folded sum `T0` takes the value `1` at both
 `p + q - 2` and `p + q`, contradiction: in the step identity the only sign-change pairs summing to
 `p + q` are `(p, q)` and `(q, p)`, so the sum is `±8` while `|2 a 0 Δ| ≤ 4`. Only the signs of `a` on
-`[0, p + q]` are used. Ported from the bench probes of 2026-10-06 (lane K2).
+`[0, p + q]` are used.
 -/
 
 @[expose] public section

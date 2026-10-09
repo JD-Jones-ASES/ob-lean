@@ -11,8 +11,6 @@ With `a = seq h`, the product `∏_{j < n - u} a j a (j + u)` is read off the au
 (autocorrelation `(-1)^((n-1)/2)`), `a k * a (n - 1 - k) = (-1)^((n-1)/2 + k)` for every `k < n`
 (`skew_seq`). The sign-change form `skew_pair`: with `d s = a (s - 1) a s`, `d s = -d (n - s)` for
 `1 ≤ s ≤ n - 1` (position `s` is a sign change iff position `n - s` is not).
-
-Lane: **skew**.
 -/
 
 @[expose] public section

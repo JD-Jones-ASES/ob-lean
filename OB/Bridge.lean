@@ -7,7 +7,7 @@ public import OB.Defs
 
 `seq h` reads `h : Fin n → ℤ` on `ℕ`, zero outside `[0, n)`; `aperiodic h k` becomes a `Finset.range`
 sum; a product of signs is read off its sum (`prod_signs`); and, for odd `n`, odd shifts have
-autocorrelation `0` (`odd_shift_zero`). Ported from the bench probes of 2026-10-06 (lane K2).
+autocorrelation `0` (`odd_shift_zero`).
 -/
 
 @[expose] public section
