@@ -4,6 +4,7 @@
   "theorem_names": [
     "OddBarker.odd_length_mem",
     "OddBarker.odd_exists_iff",
+    "OddBarker.unique",
     "OddBarker.aperiodic_eq",
     "OddBarker.skew",
     "OddBarker.fold",
@@ -23,7 +24,8 @@
     "OddBarker.RealMatrix",
     "OddBarker.IsCirculant",
     "OddBarker.IsSignHadamard",
-    "OddBarker.ExistsRealCirculantHadamard"
+    "OddBarker.ExistsRealCirculantHadamard",
+    "OddBarker.canon"
   ],
   "permitted_axioms": [
     "propext",

@@ -95,6 +95,6 @@ theorem key_bound (a : ℕ → ℤ) (p q : ℕ)
   rcases hap with h1 | h1 <;> rcases hap1 with h2 | h2 <;> rcases haq with h3 | h3 <;>
     rcases haq1 with h4 | h4 <;> rcases ha0 with h5 | h5 <;> rcases haw1 with h6 | h6 <;>
     rcases haw2 with h7 | h7 <;> simp only [h1, h2, h3, h4, h5, h6, h7, ne_eq, not_true_eq_false] at hstep hpb hqb <;>
-    (try norm_num at hstep) <;> (try norm_num at hpb) <;> (try norm_num at hqb)
+    (try norm_num at hstep)
 
 end OddBarker

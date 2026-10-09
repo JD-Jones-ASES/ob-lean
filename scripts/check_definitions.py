@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check that the seven definitions of Challenge.lean and OB/Defs.lean agree character for character
+"""Check that the seven restated definitions of Challenge.lean and OB/Defs.lean agree character for character
 with each other and with the two challenge files of openai/math at commit
 adc7f1241b42e322a6451854ab7e4b4c146bf78a, up to the namespace: IsSign, aperiodic and IsBarker with
 lean/ComparatorChallenges/EvenBarker.lean (scripts/EvenBarker-oai.txt) and RealMatrix, IsCirculant,
@@ -17,7 +17,8 @@ REFERENCES = {
     "scripts/CirculantHadamard-oai.txt": ["RealMatrix", "IsCirculant", "IsSignHadamard",
                                           "ExistsRealCirculantHadamard"],
 }
-NAMES = [name for names in REFERENCES.values() for name in names]
+HOUSE = ["canon"]  # defined here, compared between Challenge.lean and OB/Defs.lean only
+NAMES = [name for names in REFERENCES.values() for name in names] + HOUSE
 
 
 def blocks(text):
@@ -44,9 +45,19 @@ def main():
                 sys.exit(1)
             ref[name] = found[name]
     ok = True
+    chal = blocks((ROOT / "Challenge.lean").read_text(encoding="utf-8"))
+    defs = blocks((ROOT / "OB/Defs.lean").read_text(encoding="utf-8"))
+    for name in HOUSE:
+        if name not in chal or name not in defs or chal[name] != defs[name]:
+            print(f"house definition {name} missing or differs between Challenge.lean and OB/Defs.lean")
+            ok = False
+        else:
+            print(f"ok    Challenge.lean = OB/Defs.lean: {name}")
     for rel in ("Challenge.lean", "OB/Defs.lean"):
         ours = blocks((ROOT / rel).read_text(encoding="utf-8"))
         for name in NAMES:
+            if name in HOUSE:
+                continue
             if name not in ours:
                 print(f"{rel} lacks {name}")
                 ok = False

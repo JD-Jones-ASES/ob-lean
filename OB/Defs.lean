@@ -5,7 +5,7 @@ public import Mathlib
 /-!
 # Definitions
 
-The seven definitions of `Challenge.lean`, restated character for character (the import is the same,
+The eight definitions of `Challenge.lean`, restated character for character (the import is the same,
 `Mathlib`, so that every definition elaborates to the same term in both files; the registry's
 comparator judges the elaborated constants). `scripts/check_definitions.py` compares the two files
 with the two upstream files of `openai/math` they are restated from: `IsSign`, `aperiodic` and
@@ -50,5 +50,16 @@ def IsSignHadamard {n : ℕ} (H : RealMatrix n) : Prop :=
 /-- A real circulant Hadamard matrix of order `n` exists. -/
 def ExistsRealCirculantHadamard (n : ℕ) : Prop :=
   ∃ H : RealMatrix n, IsCirculant H ∧ IsSignHadamard H
+
+/-- The listed Barker sequence of each odd length (`fun _ => 1` at other lengths): the sequences of
+Schmidt–Willms's introduction, normalised to begin `+ +`. -/
+def canon : (n : ℕ) → Fin n → ℤ
+  | 1 => ![1]
+  | 3 => ![1, 1, -1]
+  | 5 => ![1, 1, 1, -1, 1]
+  | 7 => ![1, 1, 1, -1, -1, 1, -1]
+  | 11 => ![1, 1, 1, -1, -1, -1, 1, -1, -1, 1, -1]
+  | 13 => ![1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1]
+  | _ => fun _ => 1
 
 end OddBarker

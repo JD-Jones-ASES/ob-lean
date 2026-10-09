@@ -121,9 +121,16 @@ reduction gives a circulant Hadamard matrix of order `n`, so `n ∈ {1, 4}` and,
 (`even_length_eq_two_or_four_of_circulantHadamard`); feeding this to the previous two gives
 **`exists_iff_of_circulantHadamard`** and **`length_le_thirteen_of_circulantHadamard`** (their `_internal` forms).
 
-<!-- DESK: if `unique` (OB/Unique.lean, `canon`, `unique_internal`) closes and enters the Challenge, add a section:
-for odd n, (S) determines h from its first m + 1 values, and a kernel check over those values at each of the six
-lengths shows h = ±canon n or ±alt (canon n). -->
+## Uniqueness (`OB/Unique.lean`)
+
+For odd `n`, `odd_length_mem` fixes `n ∈ {1, 3, 5, 7, 11, 13}`. At each of these lengths the kernel enumerates
+every `±1` list of length `n` (`un_all n`, `2ⁿ` lists) and checks, by `decide +kernel` (`un_check1` … `un_check13`),
+that each list passing the list form of the Barker test (`un_bark`, with `un_ac` the list autocorrelation) is one
+of the four listed sequences `±canon n`, `±(−1)^j canon n` (`un_ans n`). `un_ac_ofFn` identifies the list
+autocorrelation of `List.ofFn h` with `aperiodic h`, so `List.ofFn h` passes (`un_bark_of`), lies in `un_all n`
+(`un_mem_all`), hence in `un_ans n`, and `List.ofFn_injective` returns the equation to `h` (`un_of_check`). This is
+**`unique`** (`unique_internal`). At `n = 13` the four sequences are `a13`, `−a13`, `(−1)^j a13` and `−(−1)^j a13`;
+reversal lands in the same orbit.
 
 ## Relation to the sources
 

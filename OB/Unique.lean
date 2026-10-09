@@ -23,16 +23,6 @@ Lane: **unique** (stretch).
 
 namespace OddBarker
 
-/-- The listed Barker sequence of each odd length (`fun _ => 1` elsewhere). -/
-def canon : (n : ℕ) → Fin n → ℤ
-  | 1 => ![1]
-  | 3 => ![1, 1, -1]
-  | 5 => ![1, 1, 1, -1, 1]
-  | 7 => ![1, 1, 1, -1, -1, 1, -1]
-  | 11 => ![1, 1, 1, -1, -1, -1, 1, -1, -1, 1, -1]
-  | 13 => ![1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1]
-  | _ => fun _ => 1
-
 /-! ## The enumeration (lane helpers, prefix `un_`) -/
 
 /-- The aperiodic autocorrelation of a list at shift `k`. -/

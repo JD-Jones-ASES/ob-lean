@@ -3,18 +3,20 @@
 A Barker sequence of length `n` is a `±1` sequence `h₀, …, h_{n−1}` whose aperiodic autocorrelations
 `C(k) = ∑_{j<n−k} h_j h_{j+k}`, `0 < k < n`, all satisfy `|C(k)| ≤ 1`. Turyn and Storer (*On binary sequences*,
 Proc. Amer. Math. Soc. 12 (1961) 394–399) proved that a Barker sequence of odd length has length 1, 3, 5, 7, 11
-or 13. Theorem 1(iv) of Turyn–Storer is false as stated (Willms 2014, arXiv:1404.4833); per Schmidt–Willms the
-induction survives with a corrected range; the theorem itself was never in doubt. The proof formalized here is
+or 13. Theorem 1(iv) of Turyn–Storer, on which their proof relies, is false as stated (Willms 2014,
+arXiv:1404.4833, explicit counterexamples); per Schmidt–Willms (footnote 1) parts (ii) and (iii) imply (iv) on a
+corrected range that suffices for the induction; the theorem itself was never in doubt. The proof formalized here is
 Schmidt and Willms's (*Barker sequences of odd length*, Des. Codes Cryptogr. 80 (2016) 409–414,
-arXiv:1501.06035), recast so that no case enumeration is needed.
+arXiv:1501.06035), recast so that no enumeration of sequences is needed.
 
-With the seven definitions restated character for character from two challenge files of openai/math at commit
+With the seven definitions restated character for character (and one of its own, `canon`) from two challenge files of openai/math at commit
 `adc7f124` (Apache-2.0, see [NOTICE](NOTICE); namespace `OddBarker`), [Challenge.lean](Challenge.lean) states
-thirteen theorems and [Solution.lean](Solution.lean) proves them, kernel-only; the table in
+fourteen theorems and [Solution.lean](Solution.lean) proves them, kernel-only; the table in
 [VERIFICATION.md](VERIFICATION.md) names each one. Unconditionally:
 
 - for odd `n`, a Barker sequence of length `n` exists iff `n ∈ {1, 3, 5, 7, 11, 13}` (`odd_length_mem`,
-  `odd_exists_iff`);
+  `odd_exists_iff`), and it is the listed sequence of its length up to negation and alternation
+  (`unique`: `h = ±canon n` or `h = ±(−1)^j canon n`, by a kernel enumeration of the `2ⁿ` sign patterns);
 - for odd `n` and `m = (n − 1)/2`: `C(k) = 0` at odd shifts and `(−1)^m` at even ones (`aperiodic_eq`);
   `h_k h_{n−1−k} = (−1)^{m+k}` (`skew`); `∑_{k≤w} (−1)^k h_k h_{w−k} = 1` for even `w ≤ n − 3` (`fold`);
   `h_{u−1} h_u = h_{2u−1} h_{2u}` for `1 ≤ u ≤ (n − 3)/2` (`doubling`); and Schmidt–Willms's Lemmas 3 and 4: for
@@ -33,8 +35,7 @@ direction of openai/math's `exists_iff_order_one_or_four`; `exists_iff_of_circul
 theorems discharge them by unfolding alone.
 
 Not claimed: the even-length classification and the circulant Hadamard theorem themselves (openai/math catalogues
-Lean proofs of both, at Lean v4.34.1, not registered on Palomar and not checked here); Turyn–Storer's Theorem 1;
-the uniqueness of the sequences. <!-- DESK: if `unique` lands, move it to the bullets and count fourteen. -->
+Lean proofs of both, at Lean v4.34.1, not registered on Palomar and not checked here); Turyn–Storer's Theorem 1.
 
 > As of 2026-10-09 (UTC), no formalization of the odd-length classification was located in openai/math (whose
 > scope note for family 179 leaves the odd lengths out), the Palomar registry, formal-conjectures (which states
@@ -44,7 +45,7 @@ the uniqueness of the sequences. <!-- DESK: if `unique` lands, move it to the bu
 Lean `v4.35.0-rc2` and Mathlib `v4.35.0-rc2` (commit `065356127b1dc0016f66b7283ce0ce2c4055aa55`) are pinned by the
 committed manifest; there are no GitHub Actions workflows. `python scripts/verify.py --fetch-cache` runs every
 check (the pins, the source guard, the definition comparison against openai/math, the statement comparison, the
-build with the axiom audit, module resolution, the elaboration check of the seven definitions, and Palomar's
+build with the axiom audit, module resolution, the elaboration check of the eight definitions, and Palomar's
 core-notation audit); [VERIFICATION.md](VERIFICATION.md) lists them and their limits, [PROOF.md](PROOF.md) gives the
 mathematics with the Lean name of every step, and [DISCLOSURE.md](DISCLOSURE.md) the assistance statement.
 

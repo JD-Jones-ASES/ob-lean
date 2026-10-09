@@ -5,7 +5,7 @@
 
 In order: the pins (lean-toolchain and the Mathlib revision of lake-manifest.json are the committed
 ones), the source guard, the definition comparison against the two challenge files of openai/math, the statement
-comparison between Challenge.lean and Solution.lean, the exact certificates under note/, the Lean
+comparison between Challenge.lean and Solution.lean, the exact certificates under note/ (none in this repository), scripts/check_barker.py, the Lean
 build of every target (including the Test audit, which fails on any axiom beyond propext,
 Classical.choice and Quot.sound), the module-resolution check, the elaboration check of the compared
 definitions (printed with pp.all from the Challenge and from OB.Defs, which must agree exactly,
@@ -125,6 +125,7 @@ def main():
     ok &= check_script("definitions", ["scripts/check_definitions.py"])
     ok &= check_script("statements", ["scripts/check_statements.py"])
     ok &= check_certificates()
+    ok &= check_script("check_barker.py (the standard-library certificate)", ["scripts/check_barker.py"])
     if not skip_build:
         if fetch:
             ok &= step("lake exe cache get", run(["lake", "exe", "cache", "get"]).returncode == 0)

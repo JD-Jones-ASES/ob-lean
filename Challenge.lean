@@ -11,11 +11,12 @@ Storer (*On binary sequences*, Proc. Amer. Math. Soc. 12 (1961) 394–399) prove
 sequence of odd length has length at most 13, and that the odd lengths that occur are 1, 3, 5, 7, 11
 and 13; their Theorem 1(iv), used by that proof, is false as stated (Willms, arXiv:1404.4833), and
 the proof formalized here is that of Schmidt and Willms (*Barker sequences of odd length*, Des.
-Codes Cryptogr. 80 (2016) 409–414, arXiv:1501.06035), recast so that no case enumeration is needed.
+Codes Cryptogr. 80 (2016) 409–414, arXiv:1501.06035), recast so that no enumeration of sequences is needed.
 This file states, and `Solution.lean` proves:
 
 * the classification: a Barker sequence of odd length `n` exists exactly when
-  `n ∈ {1, 3, 5, 7, 11, 13}` (`odd_length_mem`, `odd_exists_iff`);
+  `n ∈ {1, 3, 5, 7, 11, 13}` (`odd_length_mem`, `odd_exists_iff`), and such a sequence is the listed one
+  of its length up to negation and alternation (`unique`, by a kernel enumeration);
 * the structure of a Barker sequence of odd length `n`: odd shifts have autocorrelation `0` and even
   shifts `(-1)^((n-1)/2)` (`aperiodic_eq`); skew-symmetry `h k * h (n - 1 - k) = (-1)^((n-1)/2 + k)`
   (`skew`); the folded identity `∑_{k ≤ w} (-1)^k h k h (w - k) = 1` for even `w ≤ n - 3` (`fold`);
@@ -82,6 +83,17 @@ def IsSignHadamard {n : ℕ} (H : RealMatrix n) : Prop :=
 def ExistsRealCirculantHadamard (n : ℕ) : Prop :=
   ∃ H : RealMatrix n, IsCirculant H ∧ IsSignHadamard H
 
+/-- The listed Barker sequence of each odd length (`fun _ => 1` at other lengths): the sequences of
+Schmidt–Willms's introduction, normalised to begin `+ +`. -/
+def canon : (n : ℕ) → Fin n → ℤ
+  | 1 => ![1]
+  | 3 => ![1, 1, -1]
+  | 5 => ![1, 1, 1, -1, 1]
+  | 7 => ![1, 1, 1, -1, -1, 1, -1]
+  | 11 => ![1, 1, 1, -1, -1, -1, 1, -1, -1, 1, -1]
+  | 13 => ![1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1]
+  | _ => fun _ => 1
+
 /-! ### The classification of odd lengths -/
 
 /-- A Barker sequence of odd length has length 1, 3, 5, 7, 11 or 13 (Turyn–Storer 1961, Theorem 2
@@ -93,6 +105,13 @@ theorem odd_length_mem {n : ℕ} (h : Fin n → ℤ) (hn : Odd n) (hb : IsBarker
 /-- For odd `n`, a Barker sequence of length `n` exists exactly when `n ∈ {1, 3, 5, 7, 11, 13}`. -/
 theorem odd_exists_iff {n : ℕ} (hn : Odd n) :
     (∃ h : Fin n → ℤ, IsBarker h) ↔ n = 1 ∨ n = 3 ∨ n = 5 ∨ n = 7 ∨ n = 11 ∨ n = 13 := by
+  sorry
+
+/-- Uniqueness: a Barker sequence of odd length is the listed one of its length up to negation and
+alternation, `h = ε • canon n` or `h = ε • ((-1)^j • canon n)` with `ε = ±1`. -/
+theorem unique {n : ℕ} (h : Fin n → ℤ) (hn : Odd n) (hb : IsBarker h) :
+    ∃ ε : ℤ, (ε = 1 ∨ ε = -1) ∧
+      ((∀ j, h j = ε * canon n j) ∨ (∀ j, h j = ε * (-1) ^ j.val * canon n j)) := by
   sorry
 
 /-! ### The structure of a Barker sequence of odd length -/

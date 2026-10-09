@@ -36,6 +36,7 @@ run_cmd do
     logError m!"Axiom audit matched only {checked} project constants; expected at least 80"
   for n in [`OddBarker.odd_length_mem,
       `OddBarker.odd_exists_iff,
+      `OddBarker.unique,
       `OddBarker.aperiodic_eq,
       `OddBarker.skew,
       `OddBarker.fold,

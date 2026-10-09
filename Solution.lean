@@ -6,7 +6,7 @@ public import OB
 # Solution
 
 Each statement of `Challenge.lean`, restated verbatim and closed by the internal theorem of the same
-name with the suffix `_internal` (`OB/Endgame.lean`, `Compose.lean`, `Parity.lean`, `Skew.lean`,
+name with the suffix `_internal` (`OB/Endgame.lean`, `Compose.lean`, `Unique.lean`, `Parity.lean`, `Skew.lean`,
 `Fold.lean`, `Runs.lean`, `Hadamard.lean`). This module does not import `Challenge.lean`; the
 definitions come from `OB/Defs.lean`, which restates those of the Challenge character for character.
 -/
@@ -23,6 +23,11 @@ theorem odd_length_mem {n : ℕ} (h : Fin n → ℤ) (hn : Odd n) (hb : IsBarker
 theorem odd_exists_iff {n : ℕ} (hn : Odd n) :
     (∃ h : Fin n → ℤ, IsBarker h) ↔ n = 1 ∨ n = 3 ∨ n = 5 ∨ n = 7 ∨ n = 11 ∨ n = 13 :=
   odd_exists_iff_internal hn
+
+theorem unique {n : ℕ} (h : Fin n → ℤ) (hn : Odd n) (hb : IsBarker h) :
+    ∃ ε : ℤ, (ε = 1 ∨ ε = -1) ∧
+      ((∀ j, h j = ε * canon n j) ∨ (∀ j, h j = ε * (-1) ^ j.val * canon n j)) :=
+  unique_internal h hn hb
 
 /-! ### The structure of a Barker sequence of odd length -/
 
