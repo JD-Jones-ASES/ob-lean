@@ -2,7 +2,7 @@
 version: "v0.4"
 
 project:
-  name: "Barker sequences of odd length: for odd n one exists if and only if n is 1, 3, 5, 7, 11 or 13 (Turyn–Storer, by the proof of Schmidt–Willms), unique up to negation and alternation; given the even-length classification, Barker sequences of positive length exist exactly at 1, 2, 3, 4, 5, 7, 11, 13"
+  name: "Barker sequences of odd length have length 1, 3, 5, 7, 11 or 13"
   description: >-
     A Lean 4 development of the classification of Barker sequences of odd length. A Barker sequence
     of length n is a sequence h of n signs whose aperiodic autocorrelations C(k), the sum over
